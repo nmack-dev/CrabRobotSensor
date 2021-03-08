@@ -2,6 +2,7 @@
  * main.ino -- Firmware for a barometer-based force-torque sensor
  * 
  * Authors: Nathan Mack, Michael Koltisko, Anh Nguyen
+ * ECSE 398 Spring 2021
  */
 
 #include <Wire.h>
@@ -24,9 +25,6 @@ Adafruit_LPS22 lps8;
 // A pointer array to allow of easy access of barometer objects
 Adafruit_LPS22 *sensorArray[8] = {&lps1, &lps2, &lps3, &lps4, &lps5, &lps6, &lps7, &lps8};
 
-// Contains current barometer values
-float barometerVals[8];
-
 // Utilizes the "Wire" library to select multiplexer addresses
 void tcaselect(uint8_t i) 
 {
@@ -48,13 +46,16 @@ void setup()
 // Main firmware loop
 void loop()
 {
+  // Contains current barometer values
+  float barometerVals[8];
+
   // Pressure event for a given sensor
   sensors_event_t pressure;
   
   // Loops through each sensor, populating the values array with a temperature reading
   for(int i = 0; i < 8; i++)
   {
-    tcaselect(i + 1);
+    tcaselect(i);
     *sensorArray[i].getEvent(&pressure);
     barometerVals[i] = pressure.pressure;
   } 
