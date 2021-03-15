@@ -25,7 +25,7 @@ def get_calibration_consts(K, Kg, W, L, h, r, a):
 
     # The sensitivity of shear loads along the x-axis
     # (Related to SFx, eq. 4)
-    A = (K*a*h)/(2*((L^3*W)/12)+2*(((L*W^3)/12)+r^2*L*W))
+    A = (K*a*h)/(2*((L**3*W)/12)+2*(((L*W**3)/12)+r**2*L*W))
     
     # The sensitivity of the sensor to loads along the z-axis
     # (Related to SFz, eq. 2)
@@ -33,11 +33,11 @@ def get_calibration_consts(K, Kg, W, L, h, r, a):
     
     # The sensitivity to applied moments around the x-axis
     # (Related to SMx, eq. 3)
-    C = (K*a)/(2*((L^3*W)/12)+2*(((L^3*W)/12)+r^2*L*W))
+    C = (K*a)/(2*((L**3*W)/12)+2*(((L**3*W)/12)+r**2*L*W))
     
     # The sensitivity to applied moments around the z-axis
     # (Related to SMz, eq. 5)
-    D = (K*Kg*h*a)/(4*((W^3*L)/12))
+    D = (K*Kg*h*a)/(4*((W**3*L)/12))
 
     # U-matrix that contains each constant to be used in firmware
     U = [[A, -A, -A, -A, -A, A, A, A],
@@ -45,12 +45,24 @@ def get_calibration_consts(K, Kg, W, L, h, r, a):
          [B, B, B, B, B, B, B, B],
          [-C, -C, -C, C, C, C, C, -C],
          [C, -C, -C, -C, -C, C, C, C],
-         [-D, D, -D, D, -D, D, -D, D]
+         [-D, D, -D, D, -D, D, -D, D]]
 
-    # TODO: Implement code that prints out this matrix in a nice format to terminal
+    # Prints out the U-matrix 
+    for row in U:
+        for cell in row:
+            print(cell)
+            print(' ')
+        
+        print('\n')
 
-# TODO: Implement a main function 
+# The main method
 def main():
+    # Example using random values
+    get_calibration_consts(4, 5, 17, 4, 2, 1, 2)
+
+# Calls main method
+if __name__ == '__main__':
+    main()
 
 
 
