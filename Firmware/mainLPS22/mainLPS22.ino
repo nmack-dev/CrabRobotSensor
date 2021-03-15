@@ -25,6 +25,24 @@ Adafruit_LPS22 lps8;
 // A pointer array to allow of easy access of barometer objects
 Adafruit_LPS22 *sensorArray[8] = {&lps1, &lps2, &lps3, &lps4, &lps5, &lps6, &lps7, &lps8};
 
+// Contains current barometer values
+float barometerVals[8];
+float *bValPtr = barometerVals;
+
+// An array that represents an 8x6 matrix conatining calibration constants
+float calibrationConsts = {{},
+                           {},
+                           {},
+                           {},
+                           {},
+                           {}}
+
+// Points to 2D calibration constants array
+float (*cRowPtr)[6] = calibrationConsts;
+
+// An array that contains the final forces values 
+float forceValues[6];
+
 // Utilizes the "Wire" library to select multiplexer addresses
 void tcaselect(uint8_t i) 
 {
@@ -46,21 +64,28 @@ void setup()
 // Main firmware loop
 void loop()
 {
-  // Contains current barometer values
-  float barometerVals[8];
-
   // Pressure event for a given sensor
   sensors_event_t pressure;
+
+  float *cCellPtr = *cRowPtr;
   
   // Loops through each sensor, populating the values array with a temperature reading
   for(int i = 0; i < 8; i++)
   {
     tcaselect(i);
     *sensorArray[i].getEvent(&pressure);
-    barometerVals[i] = pressure.pressure;
+    *bValPtr = pressure.pressure;
+    bValPtr++;
   } 
 
-  //Print the readings
+  // Bring ptr back to start of the array
+  bVptr -= 8;
+
+  // TODO: Multiply matrixes to calculate sensor forces
+  // TODO: Write pointer logic to perform calculations
+  // TODO: Test code (especially pointer logic)
+
+  // Print the readings
   for (int i = 0; i < 8; i++){
     Serial.println(barometerVals[i]);
   }
